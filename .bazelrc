@@ -1,0 +1,7 @@
+build --verbose_failures
+build --test_output=all
+
+build --apple_platform_type=ios
+build --ios_minimum_os=11.0
+
+build --ios_simulator_device="iPhone 8"

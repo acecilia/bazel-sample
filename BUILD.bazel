@@ -1,0 +1,43 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application", "ios_unit_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+# Swift Library
+
+swift_library(
+  name = "Library",
+  srcs = glob(["Library/src.swift"]),
+  visibility = ["//visibility:public"],
+)
+
+swift_library(
+  name = "LibraryTestLib",
+  srcs = glob(["Library/test.swift"]),
+  deps = [":Library"],
+  visibility = ["//visibility:public"],
+)
+
+ios_unit_test(
+  name = "LibraryTests",
+  deps = [":LibraryTestLib"],
+  minimum_os_version = "11.0",
+  test_host = "//:HostApp", # Needed to make UIScreen available for snapshots: to be able to obtain the screen size and scale
+  visibility = ["//visibility:public"],
+)
+
+# Host app
+
+swift_library(
+  name = "HostAppLib",
+  srcs = glob(["Support/AppDelegate.swift"]),
+  visibility = ["//visibility:public"],
+)
+
+ios_application(
+  name = "HostApp",
+  bundle_id = "HostApp",
+  families = ["iphone"],
+  infoplists = glob(["Support/Info.plist"]),
+  minimum_os_version = "11.0",
+  deps = [":HostAppLib"],
+  visibility = ["//visibility:public"],
+)
