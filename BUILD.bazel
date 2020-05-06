@@ -6,9 +6,20 @@ load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
 
 tags = ["no-sandbox"]
 
+apple_resource_bundle(
+  name = "LibraryResources",
+  bundle_name = "Library",
+  resources = glob([
+    "Library/resources/images.xcassets/**",
+  ]),
+  tags = tags,
+  visibility = ["//visibility:public"],
+)
+
 swift_library(
   name = "Library",
   srcs = glob(["Library/srcs/main/src.swift"]),
+  data = [":LibraryResources"],
   tags = tags,
   visibility = ["//visibility:public"],
 )
