@@ -1,18 +1,34 @@
 load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application", "ios_unit_test")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
 
 # Swift Library
 
+tags = ["no-sandbox"]
+
 swift_library(
   name = "Library",
-  srcs = glob(["Library/src.swift"]),
+  srcs = glob(["Library/srcs/main/src.swift"]),
+  tags = tags,
+  visibility = ["//visibility:public"],
+)
+
+apple_resource_bundle(
+  name = "LibraryTestResources",
+  bundle_name = "LibraryTests",
+  resources = glob([
+    "Library/resources/images.xcassets/**",
+  ]),
+  tags = tags,
   visibility = ["//visibility:public"],
 )
 
 swift_library(
   name = "LibraryTestLib",
-  srcs = glob(["Library/test.swift"]),
+  srcs = glob(["Library/srcs/test/test.swift"]),
   deps = [":Library"],
+  data = [":LibraryTestResources"],
+  tags = tags,
   visibility = ["//visibility:public"],
 )
 
@@ -21,6 +37,7 @@ ios_unit_test(
   deps = [":LibraryTestLib"],
   minimum_os_version = "11.0",
   test_host = "//:HostApp", # Needed to make UIScreen available for snapshots: to be able to obtain the screen size and scale
+  tags = tags,
   visibility = ["//visibility:public"],
 )
 
@@ -29,6 +46,7 @@ ios_unit_test(
 swift_library(
   name = "HostAppLib",
   srcs = glob(["Support/AppDelegate.swift"]),
+  tags = tags,
   visibility = ["//visibility:public"],
 )
 
@@ -39,5 +57,6 @@ ios_application(
   infoplists = glob(["Support/Info.plist"]),
   minimum_os_version = "11.0",
   deps = [":HostAppLib"],
+  tags = tags,
   visibility = ["//visibility:public"],
 )

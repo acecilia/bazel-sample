@@ -5,3 +5,5 @@ build --apple_platform_type=ios
 build --ios_minimum_os=11.0
 
 build --ios_simulator_device="iPhone 8"
+
+build --spawn_strategy=local
