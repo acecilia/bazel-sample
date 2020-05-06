@@ -1,0 +1,44 @@
+name: MyProject
+targets:
+  LibraryResources:
+    type: bundle
+    platform: iOS
+    settings:
+    - PRODUCT_NAME: Library
+    sources: [Library/resources]
+
+  Library:
+    type: framework.static
+    platform: iOS
+    deploymentTarget: "11.0"
+    sources: [Library/srcs/main/src.swift]
+    dependencies: 
+    - target: LibraryResources
+    scheme:
+      testTargets:
+        - LibraryTests
+
+  LibraryTestsResources:
+    type: bundle
+    platform: iOS
+    settings:
+    - PRODUCT_NAME: LibraryTests
+    sources: [Library/resources]
+
+  LibraryTests:
+    type: bundle.unit-test
+    platform: iOS
+    settings:
+    - TEST_HOST: App
+    sources: [Library/srcs/test/test.swift]
+    dependencies: 
+    - target: Library
+    - target: LibraryTestsResources
+
+  App:
+    type: application
+    deploymentTarget: "11.0"
+    platform: iOS
+    sources: 
+    - path: Support/AppDelegate.swift
+    - path: Support/Info.plist

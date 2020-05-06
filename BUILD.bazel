@@ -9,9 +9,8 @@ tags = ["no-sandbox"]
 apple_resource_bundle(
   name = "LibraryResources",
   bundle_name = "Library",
-  resources = glob([
-    "Library/resources/images.xcassets/**",
-  ]),
+  resources = glob(["Library/resources/images.xcassets/**"]),
+  infoplists = glob(["Support/ResourceBundleInfo.plist"]),
   tags = tags,
   visibility = ["//visibility:public"],
 )
@@ -27,9 +26,8 @@ swift_library(
 apple_resource_bundle(
   name = "LibraryTestResources",
   bundle_name = "LibraryTests",
-  resources = glob([
-    "Library/resources/images.xcassets/**",
-  ]),
+  resources = glob(["Library/resources/images.xcassets/**"]),
+  infoplists = glob(["Support/ResourceBundleInfo.plist"]),
   tags = tags,
   visibility = ["//visibility:public"],
 )
@@ -65,7 +63,7 @@ ios_application(
   name = "HostApp",
   bundle_id = "HostApp",
   families = ["iphone"],
-  infoplists = glob(["Support/Info.plist"]),
+  infoplists = glob(["Support/AppInfo.plist"]),
   minimum_os_version = "11.0",
   deps = [":HostAppLib"],
   tags = tags,
